@@ -8,9 +8,12 @@ public class PlayerInput : MonoBehaviour
     public event Action OnAttackKeyPress;
     public event Action<Vector3> OnMovementKeyPress;
 
+    [SerializeField] LayerMask NotPlayerLM;
+
     void Update()
     {
-        
+        CheckAttackKey();
+        CheckMovementKey();
     }
 
     void CheckAttackKey()
@@ -24,9 +27,9 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(ray, out var hitInfo))
+            if(Physics.Raycast(ray, out RaycastHit hitInfo, NotPlayerLM))
             {
-
+                OnMovementKeyPress.Invoke(hitInfo.point);
             }
         }
     }
