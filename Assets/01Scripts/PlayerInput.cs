@@ -5,18 +5,24 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public event Action OnAttackKeyPress;
+    public event Action<Vector3> OnAttackKeyPress;
     public event Action<Vector3> OnMovementKeyPress;
 
     void Update()
     {
-        
+
     }
 
     void CheckAttackKey()
     {
-        if(Input.GetMouseButtonUp(0))
-            OnAttackKeyPress.Invoke();
+        if (Input.GetMouseButtonUp(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit))
+            {
+                OnAttackKeyPress.Invoke((hit.point - transform.position).normalized);
+            }
+        }
     }
 
     void CheckMovementKey()
@@ -24,9 +30,9 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(ray, out var hitInfo))
+            if (Physics.Raycast(ray, out var hit))
             {
-
+                OnMovementKeyPress.Invoke(hit.point);
             }
         }
     }
