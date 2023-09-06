@@ -5,21 +5,24 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public event Action OnAttackKeyPress;
+    public event Action<Vector3> OnAttackKeyPress;
     public event Action<Vector3> OnMovementKeyPress;
-
-    [SerializeField] LayerMask NotPlayerLM;
 
     void Update()
     {
-        CheckAttackKey();
-        CheckMovementKey();
+
     }
 
     void CheckAttackKey()
     {
-        if(Input.GetMouseButtonUp(0))
-            OnAttackKeyPress.Invoke();
+        if (Input.GetMouseButtonUp(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit))
+            {
+                OnAttackKeyPress.Invoke((hit.point - transform.position).normalized);
+            }
+        }
     }
 
     void CheckMovementKey()
@@ -27,9 +30,9 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(ray, out RaycastHit hitInfo, NotPlayerLM))
+            if (Physics.Raycast(ray, out var hit))
             {
-                OnMovementKeyPress.Invoke(hitInfo.point);
+                OnMovementKeyPress.Invoke(hit.point);
             }
         }
     }
