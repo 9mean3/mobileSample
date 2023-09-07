@@ -13,16 +13,17 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-    }
-
-    private void Start()
-    {
         playerInput.OnAttackKeyPress += Attack;
         playerInput.OnMovementKeyPress += Movement;
     }
 
+    private void Start()
+    {
+    }
+
     private void Attack(Vector3 dir)
     {
+        print("attack");
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, radius, dir, distance, interactiveMask);
         foreach (RaycastHit hit in hits)
         {
@@ -32,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement(Vector3 point)
     {
-        throw new NotImplementedException();
+        print("Movement");
+        Vector3 dir = point - transform.position;
+
     }
 }

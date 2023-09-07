@@ -10,7 +10,8 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-
+        CheckAttackKey();
+        CheckMovementKey();
     }
 
     void CheckAttackKey()
